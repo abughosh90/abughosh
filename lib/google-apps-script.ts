@@ -8,12 +8,22 @@ interface GoogleAppsScriptResponse {
   rowCount?: number
 }
 
+// --- internal util: parse GAS response safely ------------------------------
+async function safeJson<T>(res: Response): Promise<T | string> {
+  const ct = res.headers.get("content-type") || ""
+  // GAS returns JSON with `application/json`, HTML for errors
+  if (ct.includes("application/json")) {
+    return (await res.json()) as T
+  }
+  return await res.text() // HTML or plain-text error
+}
+// ---------------------------------------------------------------------------
+
 export class GoogleAppsScriptService {
   private scriptUrl: string
 
   constructor() {
-    this.scriptUrl =
-      "https://script.google.com/macros/s/AKfycbzmrV3FdARLNFxZ628mVXWOkVygeuR4c55IvP4DXq_DGA0tP__Ts0NJB1cf6oxwatw/exec"
+    this.scriptUrl = "/api/gas" // use server-side proxy, avoids CORS
   }
 
   // Send data to Google Apps Script
@@ -34,12 +44,20 @@ export class GoogleAppsScriptService {
         }),
       })
 
-      if (!response.ok) {
+      if (response.status >= 400) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
 
-      const result = await response.json()
-      return result
+      const payload = await safeJson<GoogleAppsScriptResponse>(response)
+
+      // If we got HTML instead of JSON, surface a friendly error object
+      if (typeof payload === "string") {
+        return {
+          success: false,
+          error: "GAS returned HTML instead of JSON: " + payload.slice(0, 120) + "…",
+        }
+      }
+      return payload
     } catch (error) {
       console.error("Google Apps Script error:", error)
       return {
@@ -65,12 +83,20 @@ export class GoogleAppsScriptService {
         mode: "cors",
       })
 
-      if (!response.ok) {
+      if (response.status >= 400) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
 
-      const result = await response.json()
-      return result
+      const payload = await safeJson<GoogleAppsScriptResponse>(response)
+
+      // If we got HTML instead of JSON, surface a friendly error object
+      if (typeof payload === "string") {
+        return {
+          success: false,
+          error: "GAS returned HTML instead of JSON: " + payload.slice(0, 120) + "…",
+        }
+      }
+      return payload
     } catch (error) {
       console.error("Google Apps Script error:", error)
       return {
@@ -173,7 +199,8 @@ export class GoogleAppsScriptService {
 
   // Test connection to Google Apps Script
   async testConnection(): Promise<GoogleAppsScriptResponse> {
-    return this.getData("ping")
+    // Use POST instead of GET to avoid CORS issues
+    return this.sendData({}, "ping")
   }
 
   // Get system status and information
