@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 
 const GAS_URL =
-  "https://script.google.com/macros/s/AKfycbzmrV3FdARLNFxZ628mVXWOkVygeuR4c55IvP4DXq_DGA0tP__Ts0NJB1cf6oxwatw/exec"
+  "https://script.google.com/macros/s/AKfycby2iORBrwP8FcqYUUGoJL2WY_CPnWIAkdhsz0chQs8vjtGwSSOJqXYURkXqFghXaCY/exec"
 
 // Handles both GET and POST
 export async function GET(req: NextRequest) {

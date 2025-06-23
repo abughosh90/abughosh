@@ -319,7 +319,7 @@ export function GoogleDocsSync({ structures, onStructuresUpdate }: GoogleDocsSyn
               size="sm"
               onClick={() =>
                 window.open(
-                  "https://script.google.com/macros/s/AKfycbzmrV3FdARLNFxZ628mVXWOkVygeuR4c55IvP4DXq_DGA0tP__Ts0NJB1cf6oxwatw/exec",
+                  "https://script.google.com/macros/s/AKfycby2iORBrwP8FcqYUUGoJL2WY_CPnWIAkdhsz0chQs8vjtGwSSOJqXYURkXqFghXaCY/exec",
                   "_blank",
                 )
               }
@@ -332,13 +332,13 @@ export function GoogleDocsSync({ structures, onStructuresUpdate }: GoogleDocsSyn
               <strong>Deployment ID:</strong>
             </div>
             <code className="bg-white p-2 rounded block break-all">
-              AKfycbzmrV3FdARLNFxZ628mVXWOkVygeuR4c55IvP4DXq_DGA0tP__Ts0NJB1cf6oxwatw
+              AKfycby2iORBrwP8FcqYUUGoJL2WY_CPnWIAkdhsz0chQs8vjtGwSSOJqXYURkXqFghXaCY
             </code>
             <div>
-              <strong>Library ID:</strong>
+              <strong>Web App URL:</strong>
             </div>
             <code className="bg-white p-2 rounded block break-all">
-              17tiagr4nImA_fZEM1OR9tSCNctyl6tbOVH_ZHhwDqHb8fCax44XLHQwX
+              https://script.google.com/macros/s/AKfycby2iORBrwP8FcqYUUGoJL2WY_CPnWIAkdhsz0chQs8vjtGwSSOJqXYURkXqFghXaCY/exec
             </code>
           </div>
         </div>

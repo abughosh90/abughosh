@@ -66,6 +66,14 @@ function doPost(e) {
     const action = data.action || 'saveData';
     
     switch(action) {
+      case 'ping':
+        return createResponse({
+          success: true,
+          message: 'Google Apps Script is working!',
+          timestamp: new Date().toISOString(),
+          version: '2.0'
+        });
+        
       case 'saveStructures':
         return saveStructuresData(data.data);
         
@@ -98,6 +106,7 @@ function doPost(e) {
   }
 }
 
+// ✅ CRITICAL: Always return proper JSON with correct MIME type
 function createResponse(data) {
   return ContentService
     .createTextOutput(JSON.stringify(data))
