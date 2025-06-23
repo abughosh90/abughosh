@@ -12,8 +12,8 @@ import { StructuresPanel } from "../components/structures-panel"
 import { ActivitiesPanel } from "../components/activities-panel"
 import { TabularView } from "../components/tabular-view"
 import { DeleteConfirmationDialog } from "../components/delete-confirmation-dialog"
-import { FirebaseSync } from "../components/firebase-sync"
-import { FirebaseStatus } from "../components/firebase-status"
+import { GoogleDocsSync } from "../components/google-docs-sync"
+import { GoogleAppsScriptTemplate } from "../components/google-apps-script-template"
 
 /* ----------  Types ---------- */
 type ViewMode = "dashboard" | "table"
@@ -52,7 +52,7 @@ export default function WWTPProgressTracker() {
   const [structureToDeleteName, setStructureToDeleteName] = useState<string>("")
   const [activeTab, setActiveTab] = useState<"structures" | "activities">("structures")
   const [viewMode, setViewMode] = useState<ViewMode>("dashboard")
-  const [showFirebaseStatus, setShowFirebaseStatus] = useState(true)
+  const [showGoogleSetup, setShowGoogleSetup] = useState(false)
 
   /* Sharing */
   const [isSharing, setIsSharing] = useState(false)
@@ -151,7 +151,7 @@ export default function WWTPProgressTracker() {
           structures.reduce((acc, s) => acc + s.activities.reduce((p, a) => p + a.progress, 0), 0) / totalActivities,
         )
 
-  /* ----------  CRUD helpers (unchanged) ---------- */
+  /* ----------  CRUD helpers ---------- */
   const addStructure = () => {
     if (!newStructure.name.trim() || !newStructure.code.trim()) return
     const newS: Structure = { id: generateId(), ...newStructure, activities: [] }
@@ -288,20 +288,20 @@ export default function WWTPProgressTracker() {
 
             <Button
               variant="outline"
-              onClick={() => setShowFirebaseStatus(!showFirebaseStatus)}
+              onClick={() => setShowGoogleSetup(!showGoogleSetup)}
               className="flex items-center gap-2"
             >
-              🔥 Firebase Status
+              📄 Google Setup
             </Button>
           </div>
         </div>
 
-        {/* Firebase Status Panel */}
-        {showFirebaseStatus && <FirebaseStatus />}
+        {/* Google Apps Script Setup */}
+        {showGoogleSetup && <GoogleAppsScriptTemplate />}
 
-        {/* Firebase Sync Component */}
+        {/* Google Docs Sync Component */}
         <div className="mb-4">
-          <FirebaseSync structures={structures} onStructuresUpdate={setStructures} />
+          <GoogleDocsSync structures={structures} onStructuresUpdate={setStructures} />
         </div>
 
         {/* -------- Views -------- */}
